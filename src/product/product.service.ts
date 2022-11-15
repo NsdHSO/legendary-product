@@ -1,32 +1,77 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateProductDto } from './dto/create-product.dto';
+import { ProductImage } from '../image/entities/image.entity';
+import { ImageService } from '../image/image.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductService {
+  @Inject(forwardRef(() => ImageService))
+  private readonly _productImageService: ImageService;
+
   constructor(
     @InjectRepository(Product) private _productRepository: Repository<Product>,
   ) {}
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  async create(createProductDto: Product, file: any) {
+    const clone = JSON.parse(JSON.stringify(createProductDto));
+    const product = new Product();
+    const productImage = new ProductImage();
+    product.cost = clone.cost;
+    product.love = clone.love;
+    product.name = clone.name;
+    product.ranting = clone.ranting;
+    productImage.fileName = file.path;
+    console.log(file);
+    productImage.product = product;
+    return await this._productRepository.save(
+      JSON.parse(JSON.stringify(product)),
+    );
   }
 
   async findAll() {
     return await this._productRepository
       .createQueryBuilder('product')
+      .leftJoinAndSelect('product.images', 'image')
       .getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    return await this._productRepository.findOneBy({ id: id });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    let productDAO = await this._productRepository
+      .createQueryBuilder('product')
+      .where({ id: updateProductDto.id })
+      .leftJoinAndSelect('product.images', 'images')
+      .getOne();
+    const product = Object.assign({}, productDAO);
+    if (updateProductDto.name !== undefined) {
+      product.name = updateProductDto.name;
+    }
+    if (updateProductDto.cost !== undefined) {
+      product.cost = updateProductDto.cost;
+    }
+    if (updateProductDto.ranting !== undefined) {
+      product.ranting = updateProductDto.ranting;
+    }
+    if (updateProductDto.love !== undefined) {
+      product.love = updateProductDto.love;
+    }
+    if (updateProductDto.images !== undefined) {
+      updateProductDto.images.map((image) => {
+        this._productImageService.findOne(image.id).then((img) => {
+          product.images.find((imgP) => img.id === imgP.id).fileName =
+            image.fileName;
+        });
+      });
+    }
+    productDAO = product;
+    this._productRepository.create(productDAO);
+    return await this._productRepository.save(productDAO);
   }
 
   remove(id: number) {

@@ -5,11 +5,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { configService } from './config.service';
 import { ProductModule } from './product/product.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     ProductModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
