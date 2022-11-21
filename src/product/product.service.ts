@@ -63,10 +63,21 @@ export class ProductService {
     }
     if (updateProductDto.images !== undefined) {
       updateProductDto.images.map((image) => {
-        this._productImageService.findOne(image.id).then((img) => {
-          product.images.find((imgP) => img.id === imgP.id).fileName =
-            image.fileName;
-        });
+        if (image.id !== undefined) {
+          this._productImageService.findOne(image.id).then((img) => {
+            product.images.find((imgP) => img.id === imgP.id).fileName =
+              image.fileName;
+          });
+        } else {
+          this._productImageService
+            .create({
+              fileUrl: image.fileName,
+              productId: updateProductDto.id,
+            })
+            .then((images) => {
+              product.images = [images];
+            });
+        }
       });
     }
     productDAO = product;

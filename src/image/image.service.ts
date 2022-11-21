@@ -15,6 +15,7 @@ export class ImageService {
   ) {}
 
   async create(createImageDto: any) {
+    console.log(createImageDto)
     const newImage = {} as ProductImage;
     newImage.fileName = createImageDto.fileUrl;
     newImage.product = await this._productService.findOne(
