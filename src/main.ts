@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 declare const module: any;
-const allowlist = ['http://localhost:4201'];
+const allowlist = ['http://localhost:4201', 'http://localhost:4200'];
 const corsOptionsDelegate = function(req, callback) {
   let corsOptions;
   if(allowlist.indexOf(req.header('Origin')) !== -1) {

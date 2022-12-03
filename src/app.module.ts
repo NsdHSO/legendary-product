@@ -6,12 +6,14 @@ import { AppService } from './app.service';
 import { configService } from './config.service';
 import { ProductModule } from './product/product.module';
 import { ImageModule } from './image/image.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     ProductModule,
     ImageModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
