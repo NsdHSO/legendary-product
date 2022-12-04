@@ -7,6 +7,7 @@ import { configService } from './config.service';
 import { ProductModule } from './product/product.module';
 import { ImageModule } from './image/image.module';
 import { InvoiceModule } from './invoice/invoice.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { InvoiceModule } from './invoice/invoice.module';
     ProductModule,
     ImageModule,
     InvoiceModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

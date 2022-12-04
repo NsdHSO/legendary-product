@@ -29,9 +29,6 @@ class ConfigService {
       username: this.getValue('PGUSER'),
       password: this.getValue('PGPASSWORD'),
       database: this.getValue('PGDATABASE'),
-      ssl: {
-        rejectUnauthorized: false,
-      },
       synchronize: true,
       logging: false,
       autoLoadEntities: true,
