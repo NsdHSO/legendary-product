@@ -8,6 +8,7 @@ import { ProductModule } from './product/product.module';
 import { ImageModule } from './image/image.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { CustomerModule } from './customer/customer.module';
+import { StateCattleModule } from './state-cattle/state-cattle.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CustomerModule } from './customer/customer.module';
     ImageModule,
     InvoiceModule,
     CustomerModule,
+    StateCattleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
