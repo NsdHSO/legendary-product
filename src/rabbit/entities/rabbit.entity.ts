@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { RabbitCategory } from "../../rabbit-category/entities/rabbit-category.entity";
 
 @Entity()
 export class Rabbit {
@@ -16,8 +23,10 @@ export class Rabbit {
   love: boolean;
   @Column({ default: false })
   sex: boolean;
-  @Column()
-  icon: string;
-  @Column({ nullable: false })
-  name: string;
+
+  @ManyToOne(() => RabbitCategory, (category) => category.rabbits, {
+    eager: true,
+  })
+  @JoinColumn({ name: "categoryId", referencedColumnName: "name" })
+  category: RabbitCategory;
 }
