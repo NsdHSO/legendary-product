@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import * as process from 'process';
 
 declare const module: any;
-const allowlist = ['http://localhost:4201', 'http://localhost:4200'];
+const allowlist = ['http://localhost:4201', 'http://localhost:4200', 'https://quiet-medovik-e0ff03.netlify.app'];
 const corsOptionsDelegate = function (req, callback) {
   let corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
